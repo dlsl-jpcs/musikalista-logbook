@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Musikalista's Logbook</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 2em;
+            border-radius: 8px;
+            max-width: 300px;
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        label {
+            font-weight: bold;
+            color: #555;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #009951;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #007f3d;
+        }
+
+        .loader {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>ONLINE LOGBOOK</h2>
+        <form id="loginForm">
+            <label for="studentId">Student ID:</label>
+            <input type="text" id="studentId" name="studentId" required>
+
+            <!-- error -->
+            <div id="error" style="color: red; display: none; margin-bottom: 1rem;">
+
+            </div>
+
+            <button type="submit">
+                <div class="loader">
+                    <i class="fa fa-spinner fa-spin"></i>Loading
+                </div>
+
+                <div class="content">LOG</div>
+            </button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+            const studentId = document.getElementById('studentId').value;
+
+            const loader = document.querySelector('.loader');
+            const content = document.querySelector('.content');
+            const errorHtml = document.getElementById('error');
+
+            loader.style.display = 'inline-block';
+            content.style.display = 'none';
+            errorHtml.style.display = 'none';
+
+            // Send a POST request to the server (current url + '/log')
+            fetch('/log', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    studentId: studentId
+                })
+            }).then((response) => {
+                if (!response.ok) {
+                    return Promise.reject(response);
+                }
+                return response.text();
+            }).then((data) => {
+                loader.style.display = 'none';
+                content.style.display = 'inline-block';
+                console.log(data);
+                alert(data);
+            }).catch((error) => {
+                error.text().then(errorMessage => {
+                    errorHtml.style.display = 'block';
+                    errorHtml.innerHTML = errorMessage;
+                    loader.style.display = 'none';
+                    content.style.display = 'inline-block';
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

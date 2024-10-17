@@ -1,0 +1,14 @@
+{
+  "name": "musikalista-logbook",
+  "module": "src/index.ts",
+  "type": "module",
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "googleapis": "^144.0.0"
+  }
+}
