@@ -1,6 +1,7 @@
 import type { Server } from 'bun';
-import authJson from '../auth.json';
 import { google } from 'googleapis';
+
+const authJson = JSON.parse(Bun.env.AUTH_JSON!);
 
 
 const SHEETS_ID = Bun.env.LOGBOOK_EXCEL_ID;
@@ -22,6 +23,8 @@ const sheets = google.sheets({ version: 'v4', auth });
 const logbookResponse = await sheets.spreadsheets.get({
     spreadsheetId: SHEETS_ID,
 });
+
+
 
 const logbook = logbookResponse.data!;
 
